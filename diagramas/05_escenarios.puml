@@ -1,0 +1,27 @@
+@startuml escenarios
+title Escenarios - Casos de Uso (Sockbuster Video & Socks)
+left to right direction
+skinparam shadowing false
+
+actor Cliente
+actor Administrador
+
+rectangle "Sockbuster Video & Socks" {
+  usecase "CU01 Explorar y filtrar catálogo\npor colección (RF01)" as CU01
+  usecase "CU02 Gestionar carrito\n(agregar y modificar cantidades) (RF02)" as CU02
+  usecase "CU03 Realizar checkout\ny obtener resumen del pedido (RF02)" as CU03
+  usecase "CU04 Administrar inventario\ny temáticas (RF03)" as CU04
+  usecase "CU05 Publicar reseña (RF04)" as CU05
+  usecase "CU06 Autenticarse con JWT (RNF02)" as CU06
+}
+
+Cliente --> CU01
+Cliente --> CU02
+Cliente --> CU03
+Cliente --> CU05
+Administrador --> CU04
+
+CU03 ..> CU02 : <<include>>
+CU04 ..> CU06 : <<include>>
+CU05 ..> CU06 : <<include>>
+@enduml

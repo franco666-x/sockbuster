@@ -1,0 +1,97 @@
+@startuml vista_logica
+title Vista Lógica - Diagrama de Clases (Sockbuster Video & Socks)
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+
+abstract class Usuario {
+  - id : int
+  - nombre : String
+  - email : String
+  - passwordHash : String
+  + autenticar(email : String, password : String) : String
+}
+
+class Cliente {
+  + publicarResena(producto : Calcetin, estrellas : int, comentario : String) : Resena
+  + realizarCheckout(carrito : Carrito) : Pedido
+}
+
+class Administrador {
+  + registrarCalcetin(c : Calcetin, obra : Obra) : void
+  + actualizarStock(c : Calcetin, talla : String, cantidad : int) : void
+  + modificarPrecio(c : Calcetin, nuevoPrecio : double) : void
+}
+
+class Coleccion {
+  - id : int
+  - nombre : String
+}
+
+class Obra {
+  - id : int
+  - titulo : String
+  - tipo : String
+}
+
+class Calcetin {
+  - id : int
+  - nombre : String
+  - fotoUrl : String
+  - precio : double
+}
+
+class StockTalla {
+  - talla : String
+  - stock : int
+}
+
+class Carrito {
+  - id : int
+  + agregarProducto(c : Calcetin, talla : String, cantidad : int) : void
+  + modificarCantidad(item : ItemCarrito, cantidad : int) : void
+  + calcularTotal() : double
+}
+
+class ItemCarrito {
+  - talla : String
+  - cantidad : int
+}
+
+class Pedido {
+  - idPedido : String
+  - total : double
+  - estadoPago : String
+  + generarResumen() : String
+}
+
+class DetallePedido {
+  - talla : String
+  - cantidad : int
+  - precioUnitario : double
+}
+
+class Resena {
+  - estrellas : int
+  - comentario : String
+}
+
+Usuario <|-- Cliente
+Usuario <|-- Administrador
+
+Coleccion "1" o-- "0..*" Calcetin : agrupa
+Obra "1" <-- "0..*" Calcetin : inspirado en
+Calcetin "1" *-- "1..*" StockTalla : tallas y stock
+
+Cliente "1" -- "0..1" Carrito : tiene
+Carrito "1" *-- "0..*" ItemCarrito : contiene
+ItemCarrito "0..*" --> "1" Calcetin : referencia
+
+Cliente "1" -- "0..*" Pedido : realiza
+Pedido "1" *-- "1..*" DetallePedido : detalla
+DetallePedido "0..*" --> "1" Calcetin : referencia
+
+Cliente "1" -- "0..*" Resena : publica
+Calcetin "1" -- "0..*" Resena : recibe
+
+Administrador "1" ..> "0..*" Calcetin : gestiona
+@enduml

@@ -1,0 +1,16 @@
+@startuml proceso_filtrado
+title Vista de Procesos - Actividades: Filtrado del catálogo (RF01)
+skinparam shadowing false
+
+start
+:Cliente selecciona una colección temática;
+:catalogo.js lee productos.json;
+fork
+  :Obtener foto y precio de los calcetines de la colección;
+fork again
+  :Obtener stock y tallas disponibles de cada calcetín;
+end fork
+note right: Sincronización: se unen ambos\nresultados antes de mostrar
+:Mostrar calcetines filtrados en catalogo.html;
+stop
+@enduml

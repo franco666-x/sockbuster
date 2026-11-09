@@ -1,0 +1,49 @@
+@startuml vista_desarrollo
+title Vista de Desarrollo - Diagrama de Componentes (Sockbuster Video & Socks)
+skinparam shadowing false
+skinparam componentStyle uml2
+
+package "Repositorio público (GitHub)" {
+
+  package "Páginas web" {
+    [index.html] as index
+    [catalogo.html] as catalogo
+    [diagramas.html] as diagramas
+  }
+
+  package "Módulos JavaScript" {
+    [catalogo.js\n(RF01 filtros por colección)] as jsCatalogo
+    [carrito.js\n(RF02 carrito y checkout)] as jsCarrito
+    [admin.js\n(RF03 inventario y temáticas)] as jsAdmin
+    [resenas.js\n(RF04 reseñas)] as jsResenas
+    [auth.js\n(RNF02 autenticación JWT)] as jsAuth
+  }
+
+  package "Recursos" {
+    [estilos.css] as css
+    [productos.json\n(calcetines, colecciones, obras, stock)] as datos
+    [imagenes/\n(fotos de productos)] as imgProd
+    [diagramas/\n(5 vistas 4+1 en PNG/SVG)] as imgDiag
+  }
+
+  [README.md\n(enlace al sitio publicado)] as readme
+}
+
+index ..> css
+catalogo ..> css
+diagramas ..> css
+
+catalogo ..> jsCatalogo
+catalogo ..> jsCarrito
+catalogo ..> jsResenas
+catalogo ..> jsAdmin
+
+jsCatalogo ..> datos
+jsCatalogo ..> imgProd
+jsAdmin ..> datos
+jsAdmin ..> jsAuth
+jsResenas ..> jsAuth
+jsCarrito ..> datos
+
+diagramas ..> imgDiag
+@enduml

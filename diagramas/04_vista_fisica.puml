@@ -1,0 +1,30 @@
+@startuml vista_fisica
+title Vista Física - Diagrama de Despliegue (Sockbuster Video & Socks)
+skinparam shadowing false
+
+node "Dispositivo del usuario\n(Cliente / Administrador)" as dispositivo {
+  node "Navegador web" as navegador {
+    artifact "catalogo.js" as jsCat
+    artifact "carrito.js" as jsCar
+    artifact "resenas.js" as jsRes
+    artifact "admin.js" as jsAdm
+    artifact "auth.js (JWT)" as jsAuth
+  }
+}
+
+node "Servidor Web de hosting\n(GitHub Pages)" as servidor {
+  artifact "index.html" as index
+  artifact "catalogo.html" as catalogo
+  artifact "diagramas.html" as diagramas
+  artifact "estilos.css" as css
+  artifact "productos.json\n(datos del catálogo)" as datos
+  artifact "imagenes/ y diagramas/" as imagenes
+}
+
+node "Repositorio público\n(GitHub)" as repo {
+  artifact "Código web + diagramas\n+ README.md" as codigo
+}
+
+navegador -- servidor : HTTPS (RNF02)\nInternet
+repo --> servidor : despliegue\nen línea (RNF01)
+@enduml

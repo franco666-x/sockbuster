@@ -1,0 +1,26 @@
+@startuml proceso_checkout
+title Vista de Procesos - Secuencia: Checkout (RF02)
+skinparam shadowing false
+
+actor Cliente
+participant "Interfaz\n(catalogo.html)" as UI
+participant Carrito
+participant Pedido
+
+Cliente -> UI : pulsar "Checkout"
+UI -> Carrito : calcularTotal()
+Carrito --> UI : total
+UI -> Pedido : crear(carrito)
+
+par Procesos concurrentes
+  Pedido -> Pedido : generar idPedido único
+else
+  Pedido -> Pedido : simular verificación de pago (estadoPago)
+end
+
+note over Pedido : Sincronización: continúa solo cuando\nambos procesos concurrentes terminan
+
+Pedido -> Pedido : generarResumen()
+Pedido --> UI : resumen del pedido con idPedido
+UI --> Cliente : mostrar resumen del pedido
+@enduml
