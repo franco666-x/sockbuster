@@ -1,0 +1,28 @@
+{
+  "colecciones": [
+    {"id": 1, "nombre": "Ciencia Ficción"},
+    {"id": 2, "nombre": "Terror 80s"},
+    {"id": 3, "nombre": "Series de Drama"},
+    {"id": 4, "nombre": "Animación"}
+  ],
+  "obras": [
+    {"id": 1, "titulo": "Odisea Estelar 2049", "tipo": "Película"},
+    {"id": 2, "titulo": "Colonia Marte", "tipo": "Serie"},
+    {"id": 3, "titulo": "La Casa del Lago", "tipo": "Película"},
+    {"id": 4, "titulo": "Noche de Video Club", "tipo": "Película"},
+    {"id": 5, "titulo": "Familia Aguirre", "tipo": "Serie"},
+    {"id": 6, "titulo": "El Último Verano", "tipo": "Serie"},
+    {"id": 7, "titulo": "Pingüino Aventurero", "tipo": "Película"},
+    {"id": 8, "titulo": "Zorro y Nube", "tipo": "Serie"}
+  ],
+  "calcetines": [
+    {"id": 1, "nombre": "Calcetín Nave Espacial", "coleccionId": 1, "obraId": 1, "foto": "imagenes/scifi.svg", "precio": 7990, "stock": {"S": 12, "M": 20, "L": 8}},
+    {"id": 2, "nombre": "Calcetín Colono Rojo", "coleccionId": 1, "obraId": 2, "foto": "imagenes/scifi.svg", "precio": 8490, "stock": {"S": 5, "M": 10, "L": 0}},
+    {"id": 3, "nombre": "Calcetín Casa Maldita", "coleccionId": 2, "obraId": 3, "foto": "imagenes/terror.svg", "precio": 7490, "stock": {"S": 7, "M": 15, "L": 9}},
+    {"id": 4, "nombre": "Calcetín Cinta VHS", "coleccionId": 2, "obraId": 4, "foto": "imagenes/terror.svg", "precio": 6990, "stock": {"S": 0, "M": 6, "L": 11}},
+    {"id": 5, "nombre": "Calcetín Cena Familiar", "coleccionId": 3, "obraId": 5, "foto": "imagenes/drama.svg", "precio": 7790, "stock": {"S": 9, "M": 14, "L": 4}},
+    {"id": 6, "nombre": "Calcetín Atardecer", "coleccionId": 3, "obraId": 6, "foto": "imagenes/drama.svg", "precio": 7790, "stock": {"S": 3, "M": 8, "L": 8}},
+    {"id": 7, "nombre": "Calcetín Pingüino", "coleccionId": 4, "obraId": 7, "foto": "imagenes/anim.svg", "precio": 6490, "stock": {"S": 18, "M": 22, "L": 13}},
+    {"id": 8, "nombre": "Calcetín Zorro Nube", "coleccionId": 4, "obraId": 8, "foto": "imagenes/anim.svg", "precio": 6490, "stock": {"S": 10, "M": 10, "L": 10}}
+  ]
+}

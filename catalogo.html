@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sockbuster Video &amp; Socks · Catálogo</title><link rel="stylesheet" href="estilos.css"></head>
+<body>
+<header class="sitio"><a class="marca" href="index.html">📼 SOCKBUSTER Video &amp; Socks</a>
+<nav><a href="index.html">Inicio</a><a href="catalogo.html" aria-current="page">Catálogo</a><a href="diagramas.html">Arquitectura UML</a></nav></header>
+<main>
+<h1>Catálogo por colecciones</h1>
+<div class="barra"><span id="sesion-info">Sin sesión iniciada</span>
+<span><button class="btn sec" id="btn-sesion">Iniciar sesión</button> <button class="btn" id="btn-carrito">🛒 Carrito <span id="carrito-cuenta">0</span></button></span></div>
+<div id="filtros" role="group" aria-label="Filtrar por colección"></div>
+<p id="contador" class="vacio"></p>
+<div class="rejilla" id="grilla"><p>Cargando catálogo…</p></div>
+
+<section id="panel-admin" hidden>
+<h2 class="seccion">Administración de inventario y temáticas</h2>
+<p id="adm-msg" role="status"></p>
+<div class="admin-grid">
+<form class="caja" id="f-nuevo"><h3>Registrar modelo</h3>
+<label for="adm-nombre">Nombre</label><input id="adm-nombre" required>
+<label for="adm-col">Colección</label><select id="adm-col"></select>
+<label for="adm-obra">Película / serie</label><select id="adm-obra"></select>
+<div id="adm-nueva-obra" hidden><label for="adm-obra-titulo">Título de la nueva obra</label><input id="adm-obra-titulo">
+<label for="adm-obra-tipo">Tipo</label><select id="adm-obra-tipo"><option>Película</option><option>Serie</option></select></div>
+<label for="adm-precio">Precio (CLP)</label><input id="adm-precio" type="number" min="1" required>
+<label for="adm-stock">Stock inicial por talla</label><input id="adm-stock" type="number" min="0" value="10" required>
+<p><button class="btn" type="submit">Registrar</button></p></form>
+<form class="caja" id="f-stock"><h3>Actualizar stock</h3>
+<label for="adm-prod-stock">Modelo</label><select id="adm-prod-stock"></select>
+<label for="adm-talla">Talla</label><select id="adm-talla"><option>S</option><option>M</option><option>L</option></select>
+<label for="adm-cant">Nuevo stock</label><input id="adm-cant" type="number" min="0" required>
+<p><button class="btn" type="submit">Actualizar</button></p></form>
+<form class="caja" id="f-precio"><h3>Modificar precio</h3>
+<label for="adm-prod-precio">Modelo</label><select id="adm-prod-precio"></select>
+<label for="adm-nuevo-precio">Nuevo precio (CLP)</label><input id="adm-nuevo-precio" type="number" min="1" required>
+<p><button class="btn" type="submit">Modificar</button> <button class="btn sec" type="button" id="btn-reset">Restablecer catálogo</button></p></form>
+</div></section>
+</main>
+
+<aside id="carrito" aria-label="Carrito de compras">
+<div class="barra"><h2 style="margin:0">Carrito</h2><button class="btn sec" id="cerrar-carrito">Cerrar</button></div>
+<ul id="carrito-lista"></ul>
+<p><strong>Total: <span id="carrito-total">$0</span></strong></p>
+<button class="btn" id="btn-checkout" disabled>Realizar checkout</button>
+</aside>
+
+<dialog id="dlg-login"><form method="dialog" id="f-login"><h3>Iniciar sesión</h3>
+<p class="vacio">Cuentas de prueba: cliente@sockbuster.cl / cliente123 · admin@sockbuster.cl / admin123</p>
+<label for="l-email">Correo</label><input id="l-email" type="email" required>
+<label for="l-pass">Contraseña</label><input id="l-pass" type="password" required>
+<p id="l-msg" class="error"></p>
+<p><button class="btn" value="ok">Entrar</button> <button class="btn sec" value="cancel" formnovalidate>Cancelar</button></p></form></dialog>
+
+<dialog id="dlg-resumen"><h3>Resumen del pedido</h3><pre id="resumen-texto"></pre>
+<form method="dialog"><button class="btn">Cerrar</button></form></dialog>
+
+<dialog id="dlg-ficha"><h3 id="ficha-titulo"></h3><p id="ficha-prom" class="vacio"></p><ul id="ficha-lista" style="padding-left:18px"></ul>
+<p id="ficha-aviso" class="vacio">Inicia sesión como cliente para publicar una reseña.</p>
+<form id="form-resena" hidden><label for="res-estrellas">Estrellas (1 a 5)</label>
+<select id="res-estrellas"><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select>
+<label for="res-comentario">Comentario</label><textarea id="res-comentario" rows="3" maxlength="300"></textarea>
+<p id="msg-resena" role="status"></p><button class="btn" type="submit">Publicar reseña</button></form>
+<form method="dialog" style="margin-top:10px"><button class="btn sec">Cerrar</button></form></dialog>
+
+<footer>Sockbuster Video &amp; Socks · Prototipo académico</footer>
+<script src="js/auth.js"></script><script src="js/catalogo.js"></script><script src="js/carrito.js"></script>
+<script src="js/resenas.js"></script><script src="js/admin.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+function actualizarSesion() {
+  const s = Auth.sesion();
+  $('sesion-info').textContent = s ? `Sesión: ${s.nombre} (${s.rol})` : 'Sin sesión iniciada';
+  $('btn-sesion').textContent = s ? 'Cerrar sesión' : 'Iniciar sesión';
+  $('panel-admin').hidden = !Auth.verificar('admin');
+  document.dispatchEvent(new Event('sesion:cambio'));
+}
+$('btn-sesion').addEventListener('click', () => { if (Auth.sesion()) { Auth.cerrar(); actualizarSesion(); } else { $('l-msg').textContent = ''; $('dlg-login').showModal(); } });
+$('f-login').addEventListener('submit', e => {
+  if (e.submitter && e.submitter.value === 'cancel') return;
+  if (!Auth.autenticar($('l-email').value, $('l-pass').value)) { e.preventDefault(); $('l-msg').textContent = 'Credenciales incorrectas.'; return; }
+  $('l-pass').value = ''; actualizarSesion();
+});
+$('btn-carrito').addEventListener('click', () => $('carrito').classList.toggle('abierto'));
+$('cerrar-carrito').addEventListener('click', () => $('carrito').classList.remove('abierto'));
+Catalogo.iniciar().then(() => { Carrito.iniciar(); Resenas.iniciar(); Admin.iniciar(); actualizarSesion(); });
+</script>
+</body></html>

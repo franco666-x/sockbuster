@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sockbuster Video &amp; Socks · Arquitectura UML</title><link rel="stylesheet" href="estilos.css"></head>
+<body>
+<header class="sitio"><a class="marca" href="index.html">📼 SOCKBUSTER Video &amp; Socks</a>
+<nav><a href="index.html">Inicio</a><a href="catalogo.html">Catálogo</a><a href="diagramas.html" aria-current="page">Arquitectura UML</a></nav></header>
+<main>
+<h1>Arquitectura UML · Paradigma 4+1</h1>
+<p>Documentación técnica de Sockbuster Video &amp; Socks organizada por las cinco vistas, modelada en PlantUML.</p>
+<div class="indice"><a class="chip" href="#req">Requerimientos</a><a class="chip" href="#logica">Vista Lógica</a><a class="chip" href="#desarrollo">Vista de Desarrollo</a><a class="chip" href="#procesos">Vista de Procesos</a><a class="chip" href="#fisica">Vista Física</a><a class="chip" href="#escenarios">Escenarios</a></div>
+
+<h2 class="seccion" id="req">Requerimientos modelados</h2>
+<div class="tabla-scroll"><table>
+<tr><th>Requerimiento</th><th>Lógica</th><th>Desarrollo</th><th>Procesos</th><th>Física</th><th>Escenario</th><th>En la web</th></tr>
+<tr><td><strong>RF01</strong> Catálogo por colecciones</td><td>Coleccion, Calcetin, StockTalla, Obra</td><td>catalogo.js, productos.json</td><td>Actividades: Filtrado</td><td>Servidor web de hosting</td><td>CU01</td><td>Filtros en catalogo.html</td></tr>
+<tr><td><strong>RF02</strong> Carrito y pedidos</td><td>Carrito, ItemCarrito, Pedido, DetallePedido</td><td>carrito.js</td><td>Secuencia: Checkout</td><td>Navegador web</td><td>CU02, CU03</td><td>Carrito y checkout</td></tr>
+<tr><td><strong>RF03</strong> Administración de inventario</td><td>Administrador</td><td>admin.js</td><td>—</td><td>Navegador web</td><td>CU04</td><td>Panel de administración</td></tr>
+<tr><td><strong>RF04</strong> Reseñas</td><td>Cliente, Resena</td><td>resenas.js</td><td>—</td><td>Navegador web</td><td>CU05</td><td>Ficha con reseñas</td></tr>
+<tr><td><strong>RNF01</strong> Disponibilidad y despliegue en la nube</td><td>—</td><td>Repositorio público</td><td>—</td><td>GitHub Pages</td><td>—</td><td>Sitio publicado en línea</td></tr>
+<tr><td><strong>RNF02</strong> Seguridad (HTTPS y JWT)</td><td>Usuario.autenticar()</td><td>auth.js</td><td>—</td><td>Enlace HTTPS</td><td>CU06</td><td>Inicio de sesión con token</td></tr>
+</table></div>
+
+<h2 class="seccion" id="logica">Vista Lógica · Diagrama de clases</h2>
+<figure><img src="diagramas/01_vista_logica.png" alt="Diagrama de clases de Sockbuster"><figcaption>Diagrama de clases (PlantUML)</figcaption></figure>
+<p>Representa la estructura del dominio con atributos, métodos, asociaciones y multiplicidades. <em>Usuario</em> es abstracta y se especializa en <em>Cliente</em> y <em>Administrador</em>. <em>Coleccion</em> agrupa <em>Calcetin</em>, que se inspira en una <em>Obra</em> (película o serie) y compone sus tallas con stock en <em>StockTalla</em>. El <em>Cliente</em> tiene un <em>Carrito</em> con <em>ItemCarrito</em>, realiza <em>Pedido</em> (con idPedido único y detalle) y publica <em>Resena</em>. El <em>Administrador</em> gestiona calcetines. <em>Usuario.autenticar()</em> entrega el token (RNF02).</p>
+
+<h2 class="seccion" id="desarrollo">Vista de Desarrollo · Diagrama de componentes</h2>
+<figure><img src="diagramas/02_vista_desarrollo.png" alt="Diagrama de componentes de Sockbuster"><figcaption>Diagrama de componentes (PlantUML)</figcaption></figure>
+<p>Organiza el código del repositorio público: páginas web (index, catálogo y diagramas), módulos JavaScript por requerimiento (<em>catalogo.js</em> RF01, <em>carrito.js</em> RF02, <em>admin.js</em> RF03, <em>resenas.js</em> RF04, <em>auth.js</em> RNF02) y recursos (<em>productos.json</em>, imágenes, estilos y diagramas). <em>admin.js</em> y <em>resenas.js</em> dependen de <em>auth.js</em>.</p>
+
+<h2 class="seccion" id="procesos">Vista de Procesos · Secuencia y actividades</h2>
+<figure><img src="diagramas/03a_procesos_checkout.png" alt="Diagrama de secuencia del checkout"><figcaption>Secuencia del Checkout (RF02)</figcaption></figure>
+<p>Al pulsar «Checkout», la interfaz calcula el total en el <em>Carrito</em> y crea el <em>Pedido</em>. Dentro del pedido se ejecutan dos procesos concurrentes: generar el idPedido único y simular la verificación de pago. Se sincronizan y solo entonces se genera el resumen que se muestra al cliente.</p>
+<figure><img src="diagramas/03b_procesos_filtrado.png" alt="Diagrama de actividades del filtrado"><figcaption>Actividades del Filtrado del catálogo (RF01)</figcaption></figure>
+<p>El cliente selecciona una colección, <em>catalogo.js</em> lee <em>productos.json</em> y se obtienen en paralelo foto y precio por un lado, y stock y tallas por otro. Ambos resultados se unen antes de mostrar los calcetines filtrados.</p>
+
+<h2 class="seccion" id="fisica">Vista Física · Diagrama de despliegue</h2>
+<figure><img src="diagramas/04_vista_fisica.png" alt="Diagrama de despliegue de Sockbuster"><figcaption>Diagrama de despliegue (PlantUML)</figcaption></figure>
+<p>El dispositivo del usuario (cliente o administrador) ejecuta el navegador con los módulos JavaScript y se conecta por HTTPS a través de Internet (RNF02) con el servidor web de hosting, GitHub Pages, que sirve las páginas y recursos. El repositorio público despliega el sitio en línea (RNF01).</p>
+
+<h2 class="seccion" id="escenarios">Escenarios · Casos de uso (5ª vista)</h2>
+<figure><img src="diagramas/05_escenarios.png" alt="Diagrama de casos de uso de Sockbuster"><figcaption>Casos de uso (PlantUML)</figcaption></figure>
+<p>Dos actores, Cliente y Administrador, y seis casos de uso que cubren los RF y el RNF02. Se validan contra las otras cuatro vistas en la siguiente tabla de trazabilidad. RNF01 no es un caso de uso porque ningún actor lo ejecuta; se cubre en la Vista Física.</p>
+<div class="tabla-scroll"><table>
+<tr><th>Caso de uso</th><th>Vista Lógica</th><th>Vista de Desarrollo</th><th>Vista de Procesos</th><th>Vista Física</th></tr>
+<tr><td>CU01 Filtrar catálogo</td><td>Coleccion, Calcetin, StockTalla, Obra</td><td>catalogo.html, catalogo.js, productos.json</td><td>Actividades de Filtrado</td><td>Navegador web / Servidor web (GitHub Pages)</td></tr>
+<tr><td>CU02 Gestionar carrito</td><td>Carrito, ItemCarrito, Calcetin</td><td>catalogo.html, carrito.js</td><td>Parte del flujo de Checkout (calcularTotal)</td><td>Navegador web</td></tr>
+<tr><td>CU03 Checkout</td><td>Carrito, Pedido, DetallePedido</td><td>catalogo.html, carrito.js</td><td>Secuencia de Checkout</td><td>Navegador web</td></tr>
+<tr><td>CU04 Administrar inventario</td><td>Administrador, Calcetin, StockTalla, Obra</td><td>catalogo.html, admin.js, auth.js, productos.json</td><td>No modelado</td><td>Navegador web / Servidor web</td></tr>
+<tr><td>CU05 Publicar reseña</td><td>Cliente, Resena, Calcetin</td><td>catalogo.html, resenas.js, auth.js</td><td>No modelado</td><td>Navegador web</td></tr>
+<tr><td>CU06 Autenticarse (JWT)</td><td>Usuario.autenticar()</td><td>auth.js</td><td>No modelado</td><td>Navegador web, HTTPS</td></tr>
+</table></div>
+</main>
+<footer>Sockbuster Video &amp; Socks · Prototipo académico</footer>
+</body></html>
