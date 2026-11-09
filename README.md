@@ -3,7 +3,7 @@
 Evaluación Sumativa 03 · Modelamiento de soluciones informáticas (TI3025).
 Prototipo web y modelo de arquitectura con el Paradigma 4+1 (PlantUML).
 
-**Sitio publicado:** https://USUARIO.github.io/REPOSITORIO/  <!-- reemplazar por el enlace real -->
+**Sitio publicado:** https://franco666-x.github.io/sockbuster/  <!-- reemplazar por el enlace real -->
 
 ## Integrantes
 - Franco Carimoney
